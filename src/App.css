@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import "tailwindcss";
+@theme {
+    --font-lato: "Lato", sans-serif; 
+  }
+
+  @keyframes border-wave {
+    0% {
+      box-shadow: 0 0 0px rgba(0, 160, 250, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(5, 0, 253, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 0px rgba(0, 160, 250, 0.8);
+    }
+  }
+  
+  @keyframes pulse-border {
+    0% {
+      border-color: rgba(0, 160, 250, 0.4);
+      transform: scale(1);
+    }
+    50% {
+      border-color: rgba(5, 0, 253, 0.8);
+      transform: scale(1.1);
+    }
+    100% {
+      border-color: rgba(0, 160, 250, 0.4);
+      transform: scale(1);
+    }
+  }
+  
+  .animate-border-wave {
+    animation: border-wave 3s infinite ease-in-out;
+  }
+  
+  .before\:animate-pulse-border::before {
+    animation: pulse-border 3s infinite ease-in-out;
+  }
+  
