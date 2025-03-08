@@ -4,6 +4,7 @@ import Services from './components/services'
 import AboutMe from './components/about-me'
 import Skills from './components/precentage'
 import Portfolio from './components/portfolio'
+import Contact from './components/contact-us'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
     <AboutMe/>
     <Skills/>
     <Portfolio/>
+    <Contact/>
     </div>
   );
   
