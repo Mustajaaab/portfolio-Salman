@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.0.9",
     "framer-motion": "^12.4.10",
     "react": "^19.0.0",
