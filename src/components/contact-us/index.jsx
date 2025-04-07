@@ -1,52 +1,42 @@
-import React, { useState } from "react";
-import emailjs from "@emailjs/browser"; // Import EmailJS
+import React from "react";
+import { useNavigate } from "react-router-dom"; // import this
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    timeline: "",
-    service: "",
-    projectDetails: "",
-  });
-
-  const [isSent, setIsSent] = useState(false); // State to track email sent status
+  const navigate = useNavigate();
   const services = ["Website Design", "App Design", "Braiding"];
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // EmailJS Configuration
-    const serviceID = "service_4ul1c6w"; // Replace with your EmailJS Service ID
-    const templateID = "template_wy7y5ed"; // Replace with your EmailJS Template ID
-    const publicKey = "6KhzXO54mk6ZHwtbd"; // Replace with your EmailJS Public Key
-
-    const templateParams = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      timeline: formData.timeline,
-      service: formData.service,
-      projectDetails: formData.projectDetails,
-    };
-
-    // Send email using EmailJS
-    emailjs
-      .send(serviceID, templateID, templateParams, publicKey)
-      .then((response) => {
-        console.log("Email Sent Successfully!", response.status, response.text);
-        setIsSent(true); // Set state to show success message
-      })
-      .catch((error) => {
-        console.error("Email Sending Failed!", error);
+  const onSubmit = async (event) => {
+    event.preventDefault();
+  
+    const formData = new FormData(event.target);
+    formData.append("access_key", "687f4d25-ab01-4c35-88d7-a9e42ea7ceec");
+  
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+  
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: json,
       });
+  
+      const result = await response.json();
+  
+      if (result.success) {
+        navigate("/success"); // 👈 navigate to success page
+        event.target.reset();
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      alert("Error submitting the form. Please try again later.");
+    }
   };
 
+  
   return (
     <>
       <h2 className="text-[#FEFEFE] text-3xl font-lato font-bold text-center mt-28">
@@ -57,74 +47,64 @@ const Contact = () => {
         Connect with Me
       </h2>
 
-      <div className="max-w-[800px] mx-auto flex flex-col lg:flex-row gap-6 mt-8 px-5">
-        <form onSubmit={handleSubmit} className="space-y-4 w-full lg:w-[50%]">
-          <div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
-              placeholder="Name"
-              required
-            />
-          </div>
+      <form className="max-w-[800px] mx-auto flex flex-col lg:flex-row gap-6 mt-8 px-5" onSubmit={onSubmit}>
+        <div className="space-y-4 w-full lg:w-[50%]">
+          <input
+            type="text"
+            name="name"
+            className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
+            placeholder="Name"
+            required
+          />
 
-          <div>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
-              placeholder="Phone Number"
-              required
-            />
-          </div>
+          <input
+            type="tel"
+            name="phone"
+            className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
+            placeholder="Phone Number"
+            required
+          />
 
-          <div>
-            <input
-              type="text"
-              name="timeline"
-              value={formData.timeline}
-              onChange={handleChange}
-              className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
-              placeholder="Timeline"
-              required
-            />
-          </div>
-        </form>
+          <input
+            type="text"
+            name="timeline"
+            className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
+            placeholder="Timeline"
+            required
+          />
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 w-full lg:w-[50%]">
-          <div>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full py-3 px-6 bg-white/4 text-white  rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
-              placeholder="Email"
-              required
-            />
-          </div>
+        <div className="space-y-4 w-full lg:w-[50%] mt-4 lg:mt-0">
+          <input
+            type="email"
+            name="email"
+            className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
+            placeholder="Email"
+            required
+          />
 
           <div className="relative">
             <select
               name="service"
-              value={formData.service}
-              onChange={handleChange}
               className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA] appearance-none pr-12"
               required
             >
-              <option value="" className="text-[#959595]" disabled>
+              <option
+                value=""
+                className="text-[#959595] bg-[rgba(255,255,255,0.04)]"
+              >
                 Select a service
               </option>
               {services.map((service, index) => (
-                <option key={index} value={service}>
+                <option
+                  key={index}
+                  value={service}
+                  className="text-black bg-[rgba(255,255,255,0.04)] "
+                >
                   {service}
                 </option>
               ))}
+
             </select>
 
             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -140,35 +120,24 @@ const Contact = () => {
             </div>
           </div>
 
-          <div>
-            <textarea
-              name="projectDetails"
-              value={formData.projectDetails}
-              onChange={handleChange}
-              rows="6"
-              className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none  focus:ring-2 focus:ring-[#00A0FA]"
-              placeholder="Project Details"
-              required
-            ></textarea>
-          </div>
+          <textarea
+            name="projectDetails"
+            rows="6"
+            className="w-full py-3 px-6 bg-white/4 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#00A0FA]"
+            placeholder="Project Details"
+            required
+          ></textarea>
 
           <div className="flex justify-end">
             <button
               type="submit"
-              onClick={handleSubmit}
               className="border-[#959595] font-lato border-[1px] text-white py-2 px-8 rounded-md font-bold"
             >
               Send
             </button>
           </div>
-
-          {isSent && (
-            <p className="text-green-500 text-center mt-3">
-              ✅ Email Sent Successfully!
-            </p>
-          )}
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };
